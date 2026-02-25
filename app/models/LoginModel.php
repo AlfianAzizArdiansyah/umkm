@@ -1,0 +1,26 @@
+<?php
+
+class LoginModel
+{
+
+	private $table = 'user';
+	private $db;
+
+	public function __construct()
+	{
+		$this->db = new Database;
+	}
+
+	public function checkLogin($data)
+	{
+		$query = "SELECT user.id as user_id,user.*, role.* FROM user JOIN role ON user.role_id = role.id WHERE email = :email AND password = :password";
+		$this->db->query($query);
+		$this->db->bind('email', $data['email']);
+		$this->db->bind('password', md5($data['password']));
+		//$this->db->execute();
+		//return $this->db->rowCount();
+		$data = $this->db->single();
+		return $data;
+	}
+
+}
